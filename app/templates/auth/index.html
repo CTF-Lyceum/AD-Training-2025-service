@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .container h1 {
+            margin-bottom: 20px;
+        }
+
+        .container p {
+            margin-bottom: 10px;
+        }
+
+        .container .links {
+            display: flex;
+            justify-content: center;
+        }
+
+        .container .links a {
+            margin: 0 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .container .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Добро пожаловать на наш сервис заметок!</h1>
+        <p>Здесь вы можете создавать, просматривать и редактировать заметки.</p>
+        <p></p>
+        <div class="links">
+            <a href="/register">Регистрация</a>
+            <a href="/login">Вход</a>
+            <a href="/create_note">Создать заметку</a>
+            <a href="/note/wall">Просмотреть заметки</a>
+        </div>
+    </div>
+</body>
+</html>
