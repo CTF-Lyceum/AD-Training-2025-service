@@ -127,10 +127,26 @@
         a {
             text-decoration: none;
         }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: right;
+        }
+        .username {
+            font-weight: bold;
+        }
 
     </style>
 </head>
 <body>
+    <header>
+        {% if current_user %}
+            <span class="username">Logged in as: {{ current_user }}</span>
+        {% else %}
+            <a href="/login">Login</a>
+        {% endif %}
+    </header>
     <div class="container">
         <h2>Create Note</h2>
         <form action="/create_note" method="post">

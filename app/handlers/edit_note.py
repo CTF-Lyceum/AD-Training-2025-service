@@ -37,4 +37,4 @@ def edit_note(note_id):
 
         return redirect(url_for("view_note_route.view_note", note_id=note_id))
 
-    return render_template("notes/edit_note.html", note=note)
+    return render_template("notes/edit_note.html", note=note, current_user=username)

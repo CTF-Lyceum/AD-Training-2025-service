@@ -31,10 +31,9 @@ def view_note(note_id):
 
     if note:
         if note["visibility"] == "private":
-            if 'username' not in request.cookies or request.cookies['username'] != note['author'] and\
-                    request.cookies['username'] != "admin":
+            if username != note['author'] and username != "admin":
                 return render_template('errors/404.html')
-        return render_template('notes/view_note.html', note=note)
+        return render_template('notes/view_note.html', note=note, current_user=username)
     else:
         return render_template('errors/404.html')
 
@@ -43,13 +42,24 @@ def view_note(note_id):
 def note_wall():
     filter_content = request.args.get('filter_content', '')
     notes = load_data(NOTES_FILE)
+    jwt_token = request.cookies.get("jwt_token")
+    if jwt_token:
+        try:
+            payload = jwt.decode(jwt_token, SECRET_KEY, algorithms=["HS256"])
+            username = payload.get('username')
+        except jwt.ExpiredSignatureError:
+            username = None
+        except jwt.InvalidTokenError:
+            username = None
+    else:
+        username = None
 
     if filter_content:
         filtered_notes = [note for note in notes.values() if re.search(filter_content, note['content'], re.IGNORECASE)]
     else:
         filtered_notes = [note for note in notes.values() if note['visibility'] == 'public' or
-                          note['author'] == request.cookies['username'] or request.cookies['username'] == 'admin']
+                          note['author'] == username or username == 'admin']
 
     sorted_notes = sorted(filtered_notes, key=lambda x: x['timestamp'], reverse=True)
 
-    return render_template('notes/note_wall.html', notes=sorted_notes)
+    return render_template('notes/note_wall.html', notes=sorted_notes, current_user=username)

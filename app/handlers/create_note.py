@@ -33,7 +33,7 @@ def create_note():
         title = request.form.get('title')
         content = request.form.get('content')
         visibility = request.form.get('visibility', 'private')
-        author = username  # Используем имя пользователя из JWT
+        author = username
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         id_ = str(int(datetime.now().timestamp() * 1000))
         notes = load_data(NOTES_FILE)
@@ -55,4 +55,4 @@ def create_note():
     if not username:
         return redirect(url_for('auth_route.login'))
 
-    return render_template("notes/create_note.html")
+    return render_template("notes/create_note.html", current_user=username)
