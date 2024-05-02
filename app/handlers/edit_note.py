@@ -4,7 +4,7 @@ from .create_note import verify_jwt_cookie
 
 edit_note_route = Blueprint("edit_note_route", __name__)
 
-NOTES_FILE = "app/service/database/notes.json"
+NOTES_FILE = "app/database/notes.json"
 
 
 @edit_note_route.route('/note/edit/<note_id>', methods=["GET", "POST"])

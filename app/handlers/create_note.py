@@ -6,7 +6,7 @@ from config import SECRET_KEY
 
 create_note_route = Blueprint("create_note_route", __name__)
 
-NOTES_FILE = "app/service/database/notes.json"
+NOTES_FILE = "app/database/notes.json"
 
 
 def verify_jwt_cookie():

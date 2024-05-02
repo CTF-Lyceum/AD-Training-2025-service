@@ -8,7 +8,7 @@ from .login import load_data
 view_note_route = Blueprint("view_note_route", __name__)
 
 
-NOTES_FILE = "app/service/database/notes.json"
+NOTES_FILE = "app/database/notes.json"
 
 
 @view_note_route.route("/note/<note_id>", methods=["GET"])

@@ -7,7 +7,7 @@ from config import SECRET_KEY
 
 
 auth_route = Blueprint("auth_route", __name__)
-ACCOUNTS_FILE = "app/service/database/accounts.json"
+ACCOUNTS_FILE = "app/database/accounts.json"
 
 
 def load_data(file_path):
