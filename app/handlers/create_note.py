@@ -50,7 +50,7 @@ def create_note():
             "id": str(id),
             'title': title,
             'content': content,
-            'visibility': visibility,
+            'visibility': "public",
             'author': author,
             'timestamp': timestamp
         }
