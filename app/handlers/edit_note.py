@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for, make_response
 from .login import load_data, save_data
 from .create_note import verify_jwt_cookie
 
@@ -10,6 +10,8 @@ NOTES_FILE = "app/database/notes.json"
 @edit_note_route.route('/note/edit/<note_id>', methods=["GET", "POST"])
 def edit_note(note_id):
     username = verify_jwt_cookie()
+    can_edit = request.cookies.get("can_edit_note")
+
     if not username:
         return redirect(url_for('auth_route.register'))
 
@@ -19,9 +21,7 @@ def edit_note(note_id):
     if not note:
         return render_template('errors/404.html')
 
-    is_admin = username == 'admin'
-
-    if not is_admin and note['author'] != username:
+    if can_edit == "0":
         return render_template('errors/403.html')
 
     if request.method == "POST":
@@ -37,4 +37,7 @@ def edit_note(note_id):
 
         return redirect(url_for("view_note_route.view_note", note_id=note_id))
 
-    return render_template("notes/edit_note.html", note=note, current_user=username)
+    response = make_response(render_template("notes/edit_note.html", note=note, current_user=username))
+    response.delete_cookie("can_edit_note")
+
+    return response

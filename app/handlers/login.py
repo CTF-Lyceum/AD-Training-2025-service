@@ -43,7 +43,10 @@ def register():
 
         return redirect(url_for('auth_route.login'))
 
-    return render_template("auth/register.html")
+    response = make_response(render_template("auth/register.html"))
+    response.delete_cookie("can_edit_note")
+
+    return response
 
 
 @auth_route.route('/login', methods=['GET', 'POST'])
@@ -54,7 +57,6 @@ def login():
         accounts = load_data(ACCOUNTS_FILE)
 
         if accounts and username in accounts:
-            # Проверяем соответствие пароля
             if accounts[username]["password"]:
                 token = jwt.encode({'username': username, 'exp': datetime.utcnow() + timedelta(hours=1)}, SECRET_KEY,
                                    algorithm='HS256')
@@ -66,5 +68,8 @@ def login():
         else:
             return render_template("errors/401.html")
 
-    return render_template('auth/login.html')
+    response = make_response(render_template('auth/login.html'))
+    response.delete_cookie("can_edit_note")
+
+    return response
 

@@ -1,6 +1,6 @@
 import re
 import jwt
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for, make_response
 from config import SECRET_KEY
 from .login import load_data
 
@@ -33,7 +33,14 @@ def view_note(note_id):
         if note["visibility"] == "private":
             if username != note['author'] and username != "admin":
                 return render_template('errors/404.html')
-        return render_template('notes/view_note.html', note=note, current_user=username)
+        if username != note['author'] and username != "admin":
+            can_edit = "0"
+        else:
+            can_edit = "1"
+        response = make_response(render_template('notes/view_note.html', note=note, current_user=username))
+        response.set_cookie("can_edit_note", can_edit)
+
+        return response
     else:
         return render_template('errors/404.html')
 
@@ -62,4 +69,7 @@ def note_wall():
 
     sorted_notes = sorted(filtered_notes, key=lambda x: x['timestamp'], reverse=True)
 
-    return render_template('notes/note_wall.html', notes=sorted_notes, current_user=username)
+    response = make_response(render_template('notes/note_wall.html', notes=sorted_notes, current_user=username))
+    response.delete_cookie("can_edit_note")
+
+    return response
