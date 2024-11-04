@@ -146,14 +146,13 @@
     <header>
         {% if current_user %}
             <span class="username">Logged in as: {{ current_user }}</span>
-        {% else %}
-            <a href="/login">Login</a>
         {% endif %}
+        <a href="/login">Login</a>
     </header>
     <div class="container">
         <h1>{{ note.title }}</h1>
-        <p><strong>Author:</strong> {{ note.author }}</p>
-        <p><strong>Date:</strong> {{ note.timestamp }}</p>
+        <p><strong>Author:</strong> {{ note.creator_username }}</p>
+        <p><strong>Date:</strong> {{ note.datetime }}</p>
         <p><strong>Visibility:</strong> {{ note.visibility }}</p>
         <p>{{ note.content }}</p>
     </div>

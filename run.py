@@ -1,18 +1,4 @@
-from flask import Flask
-from flask_cors import CORS
-from app import routes
-
-
-def create_app():
-    app = Flask(__name__, template_folder="app/templates/")
-    app.static_folder = "app/static/"
-    CORS(app)
-
-    for route in routes:
-        app.register_blueprint(route)
-
-    return app
-
+from app import create_app
 
 app = create_app()
 

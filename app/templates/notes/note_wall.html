@@ -154,13 +154,11 @@
     <header>
         {% if current_user %}
             <span class="username">Logged in as: {{ current_user }}</span>
-        {% else %}
-            <a href="/login">Login</a>
         {% endif %}
+        <a href="/login">Login</a>
     </header>
     <a href="/note/wall"><h1>Стена</h1></a>
 
-    <!-- Форма для фильтрации по содержанию заметки -->
     <a href="/create_note" class="btn-create-note">Создать заметку</a>
     <p></p>
     <form action="/note/wall" method="get">
@@ -168,14 +166,13 @@
         <input type="text" id="filter_content" name="filter_content">
         <button type="submit">Filter</button>
     </form>
-    <!-- Список заметок -->
     <ul>
         {% for note in notes %}
             <li>
                 <h2><a href="/note/{{ note.id }}">{{ note.title }}</a></h2>
                 <p>{{ note.content }}</p>
-                <p>Автор: {{ note.author }}</p>
-                <p>Дата и время: {{ note.timestamp }}</p>
+                <p>Автор: {{ note.creator_username }}</p>
+                <p>Дата и время: {{ note.datetime }}</p>
                 <p>Доступность: {{ note.visibility }}</p>
             </li>
         {% endfor %}

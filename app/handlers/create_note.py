@@ -1,12 +1,10 @@
 from datetime import datetime
 from flask import Blueprint, request, render_template, redirect, url_for
 import jwt
-from .login import load_data, save_data
 from config import SECRET_KEY
+from app.database.models import Note, db, User
 
 create_note_route = Blueprint("create_note_route", __name__)
-
-NOTES_FILE = "app/database/notes.json"
 
 
 def verify_jwt_cookie():
@@ -23,17 +21,8 @@ def verify_jwt_cookie():
     return None
 
 
-def get_last_id(notes):
-    if notes:
-        return max(int(note_id) for note_id in notes.keys())
-    return 0
-
-
 @create_note_route.route('/create_note', methods=["GET", 'POST'])
 def create_note():
-    notes = load_data(NOTES_FILE)
-    id = get_last_id(notes)
-
     if request.method == "POST":
         username = verify_jwt_cookie()
         if not username:
@@ -42,23 +31,24 @@ def create_note():
         title = request.form.get('title')
         content = request.form.get('content')
         visibility = request.form.get('visibility', 'private')
-        author = username
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        id += 1
 
-        new_note = {
-            "id": str(id),
-            'title': title,
-            'content': content,
-            'visibility': "public",
-            'author': author,
-            'timestamp': timestamp
-        }
+        user = User.query.filter_by(username=username).first()
+        if not user:
+            return redirect(url_for('auth_route.login'))
 
-        notes[new_note["id"]] = new_note
-        save_data(notes, NOTES_FILE)
+        new_note = Note(
+            creator_id=user.id,
+            creator_username=username,
+            datetime=datetime.utcnow(),
+            visibility="public",
+            title=title,
+            content=content
+        )
 
-        return redirect(url_for("view_note_route.view_note", note_id=id))
+        db.session.add(new_note)
+        db.session.commit()
+
+        return redirect(url_for("view_note_route.view_note", note_id=new_note.id))
 
     username = verify_jwt_cookie()
     if not username:
