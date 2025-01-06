@@ -12,5 +12,4 @@ RUN python3 -m venv .venv && \
 EXPOSE 80
 EXPOSE 22
 VOLUME [ "/app" ]
-
-CMD ["/bin/sh", "-c", "echo service:$PASSWORD | chpasswd; sshd; ./.venv/bin/watchmedo auto-restart -d=. -p=*.py -R ./.venv/bin/python run.py"]
+ENTRYPOINT [ "entrypoint.sh" ]
