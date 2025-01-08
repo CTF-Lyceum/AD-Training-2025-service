@@ -29,4 +29,4 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/ad-training-2025-service:latest
+          tags: ghcr.io/ctf-lyceum/ad-training-2025-service:latest
